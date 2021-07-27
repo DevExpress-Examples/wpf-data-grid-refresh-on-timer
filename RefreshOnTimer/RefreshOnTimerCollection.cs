@@ -1,74 +1,127 @@
-﻿using DevExpress.Xpf.Grid;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Threading;
-using System.Collections.Specialized;
-using DevExpress.Data.Helpers;
-using DevExpress.Data.Filtering.Helpers;
 
 
 namespace WpfApp6 {
-    public class RefreshOnTimerCollection : IEnumerable, INotifyCollectionChanged {
-        protected static IBindingList GetListSource(object source, bool prioritizeIListSource) {
-            if(source is IListSource && (prioritizeIListSource || !(source is IEnumerable)))
-                return ExtractListSource(((IListSource)source).GetList());
-            return ExtractListSource(source as IEnumerable);
-        }
-        static IBindingList ExtractListSource(IEnumerable source) {
-            if(source == null)
-                return null;
-            var list = source as IList;
-            if(list == null) {
-                list = new EnumerableObservableWrapper<object>((IEnumerable)source);
-            }
-            if(list is IBindingList) {
-                return (IBindingList)list;
-            }
-            return BindingListAdapterBase.CreateFromList(list, ItemPropertyNotificationMode.PropertyChanged);
-        }
-
-        public RefreshOnTimerCollection(TimeSpan interval, object dataSource) {
+    public class RefreshOnTimerCollection : IBindingList {
+        public RefreshOnTimerCollection(TimeSpan interval, IList dataSource) {
             timer = new DispatcherTimer(DispatcherPriority.Background);
             timer.Interval = interval;
             timer.Tick += OnTick;
             timer.Start();
 
-            storage = GetListSource(dataSource, false);
-            storage.ListChanged += Storage_ListChanged;
+            storage = dataSource;
+            storageCopy = new ArrayList(storage);
         }
-
-        private void Storage_ListChanged(object sender, ListChangedEventArgs e) {
-            changed = true;
-        }
-
-        bool changed;
 
         void OnTick(object sender, EventArgs eventArgs) {
-            if(changed) {
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            lock (storage) {
+                storageCopy = new ArrayList(storage);
             }
-
-            changed = false;
+            ListChanged?.Invoke(storage, new ListChangedEventArgs(ListChangedType.Reset, 0));
         }
 
         DispatcherTimer timer;
 
-        private IBindingList storage;
+        private IList storage;
 
-        private void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
-            CollectionChanged?.Invoke(this, e);
+        private ArrayList storageCopy;
+
+        public bool SupportsChangeNotification => true;
+
+        public event ListChangedEventHandler ListChanged;
+
+        public IEnumerator GetEnumerator() {
+            return storageCopy.GetEnumerator();
         }
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public object this[int index] { get => storageCopy[index]; set => storageCopy[index] = value; }
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            return storage.GetEnumerator();
+        public int Count => storageCopy.Count;
+
+        public bool AllowNew => false;
+
+        public bool AllowEdit => false;
+
+        public bool AllowRemove => false;
+
+        public bool SupportsSearching => false;
+
+        public bool SupportsSorting => false;
+
+        public bool IsReadOnly => storage.IsReadOnly;
+
+        public bool IsFixedSize => storage.IsFixedSize;
+
+        #region NotSupported
+
+        public bool IsSorted => throw new NotSupportedException();
+
+        public PropertyDescriptor SortProperty => throw new NotSupportedException();
+
+        public ListSortDirection SortDirection => throw new NotSupportedException();
+
+        public object SyncRoot => throw new NotSupportedException();
+
+        public bool IsSynchronized => throw new NotSupportedException();
+
+        public object AddNew() {
+            throw new NotSupportedException();
         }
+
+        public void AddIndex(PropertyDescriptor property) {
+            throw new NotSupportedException();
+        }
+
+        public void ApplySort(PropertyDescriptor property, ListSortDirection direction) {
+            throw new NotSupportedException();
+        }
+
+        public int Find(PropertyDescriptor property, object key) {
+            throw new NotSupportedException();
+        }
+
+        public void RemoveIndex(PropertyDescriptor property) {
+            throw new NotSupportedException();
+        }
+
+        public void RemoveSort() {
+            throw new NotSupportedException();
+        }
+
+        public int Add(object value) {
+            throw new NotSupportedException();
+        }
+
+        public bool Contains(object value) {
+            throw new NotSupportedException();
+        }
+
+        public void Clear() {
+            throw new NotSupportedException();
+        }
+
+        public int IndexOf(object value) {
+            throw new NotSupportedException();
+        }
+
+        public void Insert(int index, object value) {
+            throw new NotSupportedException();
+        }
+
+        public void Remove(object value) {
+            throw new NotSupportedException();
+        }
+
+        public void RemoveAt(int index) {
+            throw new NotSupportedException();
+        }
+
+        public void CopyTo(Array array, int index) {
+            throw new NotSupportedException();
+        }
+        #endregion
     }
 }

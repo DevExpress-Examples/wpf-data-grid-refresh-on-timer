@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:local="clr-namespace:WpfApp6"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -12,13 +13,45 @@
         <local:ViewModel/>
     </Window.DataContext>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <dxg:GridControl AutoGenerateColumns="AddNew" ItemsSource="{Binding Source}" AllowLiveDataShaping="False"  Grid.Row="0" x:Name="grid"/>
-        <Button Content="Add new" Grid.Row="1" Command="{Binding AddNew}"/>
-        <Button Content="Edit first" Grid.Row="2" Command="{Binding EditFirst}"/>
+        <dxg:GridControl ShowBorder="False"
+                         ItemsSource="{Binding Source}"
+                         AllowLiveDataShaping="True"
+                         FilterString="([Last] >= 400)"
+                         OptimizeSummaryCalculation="False">
+            <dxg:GridControl.Resources>
+                <Style x:Key="NumericGridColumnStyle" TargetType="dxg:GridColumn">
+                    <Setter Property="EditSettings">
+                        <Setter.Value>
+                            <dxe:TextEditSettings MaskType="Numeric" Mask="f" MaskUseAsDisplayFormat="True" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Width" Value="2*" />
+                </Style>
+            </dxg:GridControl.Resources>
+            <dxg:GridControl.View>
+                <dxg:TableView AllowEditing="False" ShowFixedTotalSummary="True"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.TotalSummary>
+                <dxg:GridSummaryItem SummaryType="Count" Alignment="Right" />
+                <dxg:GridSummaryItem FieldName="Last" SummaryType="Sum" Alignment="Right" ShowInColumn="Last"/>
+            </dxg:GridControl.TotalSummary>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="Ticker" Width="3*" />
+                <dxg:GridColumn FieldName="Last" Style="{StaticResource NumericGridColumnStyle}" />
+                <dxg:GridColumn FieldName="ChgPercent" Header="Chg%" Width="3*">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="p" MaskUseAsDisplayFormat="True" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Open" Style="{StaticResource NumericGridColumnStyle}" />
+                <dxg:GridColumn FieldName="High" Style="{StaticResource NumericGridColumnStyle}" />
+                <dxg:GridColumn FieldName="Low" Style="{StaticResource NumericGridColumnStyle}" />
+                <dxg:GridColumn FieldName="DayVal" Width="2*" SortOrder="Ascending">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:ProgressBarEditSettings Minimum="300" Maximum="1000" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
     </Grid>
 </Window>

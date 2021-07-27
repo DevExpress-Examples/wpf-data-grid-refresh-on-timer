@@ -2,53 +2,75 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using DevExpress.Mvvm;
-using DevExpress.Xpf.Grid;
+using System.Windows.Threading;
 
 namespace WpfApp6 {
     class ViewModel {
+        #region Stocks
+        static readonly string[] Names = new[] {
+            "ANR", "FE", "GT", "PRGO", "APD", "PPL", "AES", "AVB", "IBM", "GAS", "EFX", "GPC", "ICE", "IVZ", "KO",
+            "CCE", "SO", "STI", "BWA", "HRL", "WFM", "LM", "TROW", "K", "EXPE", "PCAR", "TRIP", "WHR", "WMT", "NU",
+            "HST", "CVH", "LMT", "MAR", "CVC", "RF", "VMC", "PHM", "MU", "IRM", "AMT", "BXP", "STT", "PBCT", "FISV",
+            "BLL", "MTB", "DIS", "LH", "AKAM", "CPB", "MYL", "LIFE", "LEG", "SCG", "CNX", "COL", "MCHP", "GR", "DUK",
+            "BAC", "NUE", "UNM", "DLTR", "ABC", "TEG", "RRD", "EQR", "EXC", "BA", "CME", "NTRS", "VTR", "FITB", "PG",
+            "KR", "M", "SNI", "ETN", "CLF", "PH", "KEY", "SHW", "HD", "AFL", "TSS", "CMI", "HBAN", "AEP", "BIG", "LTD",
+            "ESRX", "GLW", "WPI", "MON", "AAPL", "DF", "T", "CMA", "THC", "LUV", "TXN", "TIE", "PX",
+        };
 
-        static object SyncRoot = new object();
+        static readonly string[] AdditionalNames = new[] {
+            "ZM", "RE", "BSX", "PPD", "LB", "OLN", "ENPH", "NVKR", "GNRC"
+        };
+        #endregion
 
-        Timer timer;
+        Timer timer1;
+        Timer timer2;
+        Timer timer3;
 
-        int counter = 1;
+        Random random = new Random();
 
-        protected void TimerCallback(object state) {
-            lock(SyncRoot) {
-                counter++;
-                storage.Add(new DataItem() { Id = counter, Name = "A" });
+        Stack<MarketData> additionalData = new Stack<MarketData>(AdditionalNames.Select(name => new MarketData(name)));
+
+        private void UpdateRows(object state) {
+            lock(data) {
+                if(random.Next() % 2 == 0 && additionalData.Count > 0) {
+                    data.Add(additionalData.Pop());
+                }
+            }
+        }
+
+        private void TryAddNewRow(object state) {
+            lock(data) {
+                if(random.Next() % 2 == 0 && additionalData.Count < AdditionalNames.Length) {
+                    var dataItem = data.First(x => AdditionalNames.Contains(x.Ticker));
+                    data.Remove(dataItem);
+                    additionalData.Push(dataItem);
+                }
+            }
+        }
+
+        private void TryRemoveRow(object state) {
+            lock(data) {
+                for(int i = 0; i < 2; i++) {
+                    int row = random.Next(0, data.Count);
+                    data[row].Update();
+                }
             }
         }
 
         public ViewModel() {
-            storage = new ObservableCollection<DataItem>() { new DataItem() { Id = 1, Name = "A" } };
-            timer = new Timer(TimerCallback, null, 1000, 1000);
-            Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(3), storage);
-            AddNew = new DelegateCommand(() => {
-                counter++;
-                storage.Add(new DataItem() { Id = counter, Name = "A" });
-            });
-            EditFirst = new DelegateCommand(() => {
-                storage[0].Name = "Edited";
-            });
+            timer1 = new Timer(UpdateRows, null, 0, 1);
+            timer2 = new Timer(TryAddNewRow, null, 10, 1);
+            timer3 = new Timer(TryRemoveRow, null, 20, 1);
+            data = new ObservableCollection<MarketData>(Names.Select(name => new MarketData(name)).ToList());
+            Source = new RefreshOnTimerCollection(TimeSpan.FromMilliseconds(50), data);
         }
 
-        /// <summary>
-        /// Customer's collection to perform changes
-        /// </summary>
-        private ObservableCollection<DataItem> storage;
+        private ObservableCollection<MarketData> data;
 
         /// <summary>
         /// Refresh on timer collection to be bound 
         /// </summary>
         public RefreshOnTimerCollection Source { get; set; }
-
-        public DelegateCommand AddNew { get; }
-
-        public DelegateCommand EditFirst { get; }
     }
 }
