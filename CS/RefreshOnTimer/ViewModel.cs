@@ -63,7 +63,7 @@ namespace WpfApp6 {
             timer2 = new Timer(TryAddNewRow, null, 10, 1);
             timer3 = new Timer(TryRemoveRow, null, 20, 1);
             data = new ObservableCollection<MarketData>(Names.Select(name => new MarketData(name)).ToList());
-            Source = new RefreshOnTimerCollection(TimeSpan.FromMilliseconds(50), data);
+            Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(1), data);
         }
 
         private ObservableCollection<MarketData> data;
