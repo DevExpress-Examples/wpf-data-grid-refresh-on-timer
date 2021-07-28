@@ -35,7 +35,7 @@ namespace WpfApp6 {
             ChgPercent = (DayVal - Last) * 100.0 / DayVal;
             High = Math.Max(Open, Math.Max(DayVal, Last));
             Low = Math.Min(Open, Math.Min(DayVal, Last));
-            RaisePropertyChanged("");
+            RaisePropertyChanged(null);
         }
         static double NextRnd() {
             double value = 0;

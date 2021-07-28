@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Threading;
 
@@ -13,21 +15,21 @@ namespace WpfApp6 {
             timer.Start();
 
             storage = dataSource;
-            storageCopy = new ArrayList(storage);
+            storageCopy = new List<object>(storage.Cast<object>());
         }
 
         void OnTick(object sender, EventArgs eventArgs) {
-            lock (storage) {
-                storageCopy = new ArrayList(storage);
+            lock(storage.SyncRoot) {
+                storageCopy = new List<object>(storage.Cast<object>());
             }
             ListChanged?.Invoke(storage, new ListChangedEventArgs(ListChangedType.Reset, 0));
         }
 
         DispatcherTimer timer;
 
-        private IList storage;
+        IList storage;
 
-        private ArrayList storageCopy;
+        List<object> storageCopy;
 
         public bool SupportsChangeNotification => true;
 
@@ -37,7 +39,7 @@ namespace WpfApp6 {
             return storageCopy.GetEnumerator();
         }
 
-        public object this[int index] { get => storageCopy[index]; set => storageCopy[index] = value; }
+        public object this[int index] { get => storageCopy[index]; set => new NotSupportedException(); }
 
         public int Count => storageCopy.Count;
 
@@ -57,69 +59,69 @@ namespace WpfApp6 {
 
         #region NotSupported
 
-        public bool IsSorted => throw new NotSupportedException();
+        bool IBindingList.IsSorted => throw new NotSupportedException();
 
-        public PropertyDescriptor SortProperty => throw new NotSupportedException();
+        PropertyDescriptor IBindingList.SortProperty => throw new NotSupportedException();
 
-        public ListSortDirection SortDirection => throw new NotSupportedException();
+        ListSortDirection IBindingList.SortDirection => throw new NotSupportedException();
 
-        public object SyncRoot => throw new NotSupportedException();
+        object ICollection.SyncRoot => throw new NotSupportedException();
 
-        public bool IsSynchronized => throw new NotSupportedException();
+        bool ICollection.IsSynchronized => throw new NotSupportedException();
 
-        public object AddNew() {
+        object IBindingList.AddNew() {
             throw new NotSupportedException();
         }
 
-        public void AddIndex(PropertyDescriptor property) {
+        void IBindingList.AddIndex(PropertyDescriptor property) {
             throw new NotSupportedException();
         }
 
-        public void ApplySort(PropertyDescriptor property, ListSortDirection direction) {
+        void IBindingList.ApplySort(PropertyDescriptor property, ListSortDirection direction) {
             throw new NotSupportedException();
         }
 
-        public int Find(PropertyDescriptor property, object key) {
+        int IBindingList.Find(PropertyDescriptor property, object key) {
             throw new NotSupportedException();
         }
 
-        public void RemoveIndex(PropertyDescriptor property) {
+        void IBindingList.RemoveIndex(PropertyDescriptor property) {
             throw new NotSupportedException();
         }
 
-        public void RemoveSort() {
+        void IBindingList.RemoveSort() {
             throw new NotSupportedException();
         }
 
-        public int Add(object value) {
+        int IList.Add(object value) {
             throw new NotSupportedException();
         }
 
-        public bool Contains(object value) {
+        bool IList.Contains(object value) {
             throw new NotSupportedException();
         }
 
-        public void Clear() {
+        void IList.Clear() {
             throw new NotSupportedException();
         }
 
-        public int IndexOf(object value) {
+        int IList.IndexOf(object value) {
             throw new NotSupportedException();
         }
 
-        public void Insert(int index, object value) {
+        void IList.Insert(int index, object value) {
             throw new NotSupportedException();
         }
 
-        public void Remove(object value) {
+        void IList.Remove(object value) {
             throw new NotSupportedException();
         }
 
-        public void RemoveAt(int index) {
+        void IList.RemoveAt(int index) {
             throw new NotSupportedException();
         }
 
-        public void CopyTo(Array array, int index) {
+        void ICollection.CopyTo(Array array, int index) {
             throw new NotSupportedException();
         }
         #endregion
