@@ -12,24 +12,23 @@
     <Window.DataContext>
         <local:ViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="NumericGridColumnStyle" TargetType="dxg:GridColumn">
+            <Setter Property="EditSettings">
+                <Setter.Value>
+                    <dxe:TextEditSettings MaskType="Numeric" Mask="f" MaskUseAsDisplayFormat="True" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Width" Value="2*" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <dxg:GridControl ShowBorder="False"
                          ItemsSource="{Binding Source}"
-                         AllowLiveDataShaping="True"
                          FilterString="([Last] >= 400)"
-                         OptimizeSummaryCalculation="False">
-            <dxg:GridControl.Resources>
-                <Style x:Key="NumericGridColumnStyle" TargetType="dxg:GridColumn">
-                    <Setter Property="EditSettings">
-                        <Setter.Value>
-                            <dxe:TextEditSettings MaskType="Numeric" Mask="f" MaskUseAsDisplayFormat="True" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Width" Value="2*" />
-                </Style>
-            </dxg:GridControl.Resources>
+                         SelectionMode="MultipleRow">
             <dxg:GridControl.View>
-                <dxg:TableView AllowEditing="False" ShowFixedTotalSummary="True"/>
+                <dxg:TableView AllowEditing="False" ShowFixedTotalSummary="True" AllowDragDrop="True"  KeepViewportOnDataUpdate="True"/>
             </dxg:GridControl.View>
             <dxg:GridControl.TotalSummary>
                 <dxg:GridSummaryItem SummaryType="Count" Alignment="Right" />
