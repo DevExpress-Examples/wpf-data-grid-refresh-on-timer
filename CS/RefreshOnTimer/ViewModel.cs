@@ -1,10 +1,10 @@
-﻿using System;
+﻿using DevExpress.Mvvm;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using System.Windows.Threading;
 
 namespace WpfApp6 {
     class ViewModel {
@@ -33,7 +33,7 @@ namespace WpfApp6 {
         Stack<MarketData> additionalData = new Stack<MarketData>(AdditionalNames.Select(name => new MarketData(name)));
 
         void UpdateRows(object state) {
-            lock(((ICollection)data).SyncRoot) {
+            lock(syncRoot) {
                 if(random.Next() % 2 == 0 && additionalData.Count > 0) {
                     data.Add(additionalData.Pop());
                 }
@@ -41,7 +41,7 @@ namespace WpfApp6 {
         }
 
         void TryAddNewRow(object state) {
-            lock(((ICollection)data).SyncRoot) {
+            lock(syncRoot) {
                 if(random.Next() % 2 == 0 && additionalData.Count < AdditionalNames.Length) {
                     var dataItem = data.First(x => AdditionalNames.Contains(x.Ticker));
                     data.Remove(dataItem);
@@ -51,7 +51,7 @@ namespace WpfApp6 {
         }
 
         void TryRemoveRow(object state) {
-            lock(((ICollection)data).SyncRoot) {
+            lock(syncRoot) {
                 for(int i = 0; i < 2; i++) {
                     int row = random.Next(0, data.Count);
                     data[row].Update();
@@ -61,17 +61,24 @@ namespace WpfApp6 {
 
         public ViewModel() {
             data = new ObservableCollection<MarketData>(Names.Select(name => new MarketData(name)).ToList());
+            syncRoot = ((ICollection)data).SyncRoot;
             Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(1), data);
+            DisposeViewModelCommand = new DelegateCommand(() => {
+                timer1.Dispose();
+                timer2.Dispose();
+                timer3.Dispose();
+                Source.Dispose();
+            });
             timer1 = new Timer(UpdateRows, null, 0, 1);
             timer2 = new Timer(TryAddNewRow, null, 10, 1);
             timer3 = new Timer(TryRemoveRow, null, 20, 1);
         }
 
+        object syncRoot;
         ObservableCollection<MarketData> data;
 
-        /// <summary>
-        /// Refresh on timer collection to be bound 
-        /// </summary>
         public RefreshOnTimerCollection Source { get; set; }
+
+        public DelegateCommand DisposeViewModelCommand { get; }
     }
 }

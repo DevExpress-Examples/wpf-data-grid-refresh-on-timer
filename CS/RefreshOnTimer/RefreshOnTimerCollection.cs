@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Threading;
 
-
 namespace WpfApp6 {
-    public class RefreshOnTimerCollection : IBindingList {
+    public class RefreshOnTimerCollection : IBindingList, IDisposable {
         public RefreshOnTimerCollection(TimeSpan interval, IList dataSource) {
             timer = new DispatcherTimer(DispatcherPriority.Background);
             timer.Interval = interval;
@@ -39,25 +38,29 @@ namespace WpfApp6 {
             return storageCopy.GetEnumerator();
         }
 
-        public object this[int index] { get => storageCopy[index]; set => new NotSupportedException(); }
-
-        public int Count => storageCopy.Count;
-
-        public bool AllowNew => false;
-
-        public bool AllowEdit => false;
-
-        public bool AllowRemove => false;
-
-        public bool SupportsSearching => false;
-
-        public bool SupportsSorting => false;
-
-        public bool IsReadOnly => storage.IsReadOnly;
-
-        public bool IsFixedSize => storage.IsFixedSize;
+        public void Dispose() {
+            timer.Stop();
+        }
 
         #region NotSupported
+
+        object IList.this[int index] { get => storageCopy[index]; set => new NotSupportedException(); }
+
+        int ICollection.Count => storageCopy.Count;
+
+        bool IBindingList.AllowNew => false;
+
+        bool IBindingList.AllowEdit => false;
+
+        bool IBindingList.AllowRemove => false;
+
+        bool IBindingList.SupportsSearching => false;
+
+        bool IBindingList.SupportsSorting => false;
+
+        bool IList.IsReadOnly => storage.IsReadOnly;
+
+        bool IList.IsFixedSize => storage.IsFixedSize;
 
         bool IBindingList.IsSorted => throw new NotSupportedException();
 
