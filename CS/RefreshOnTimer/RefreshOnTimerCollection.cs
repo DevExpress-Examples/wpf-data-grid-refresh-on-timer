@@ -33,12 +33,19 @@ namespace WpfApp6 {
             timer.Start();
 
             storage = dataSource;
-            storageCopy = new List<object>(storage.Cast<object>());
+            CopyStorage();
+        }
+
+        void CopyStorage() {
+            storageCopy = new List<object>(storage.Count);
+            foreach (var item in storage) {
+                storage.Add(item);
+            }
         }
 
         void OnTick(object sender, EventArgs eventArgs) {
             lock(storage.SyncRoot) {
-                storageCopy = new List<object>(storage.Cast<object>());
+                CopyStorage();
             }
             listChanged?.Invoke(storage, new ListChangedEventArgs(ListChangedType.Reset, 0));
         }

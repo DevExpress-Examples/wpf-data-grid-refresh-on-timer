@@ -31,7 +31,7 @@ namespace WpfApp6 {
 
         Random random = new Random();
 
-        Stack<MarketData> additionalData = new Stack<MarketData>(AdditionalNames.Select(name => new MarketData(name)));
+        Stack<MarketData> additionalData;
 
         object syncRoot;
         ObservableCollection<MarketData> data;
@@ -41,6 +41,7 @@ namespace WpfApp6 {
         public ViewModel() {
             data = new ObservableCollection<MarketData>(Names.Select(name => new MarketData(name)).ToList());
             syncRoot = ((ICollection)data).SyncRoot;
+            additionalData = new Stack<MarketData>(AdditionalNames.Select(name => new MarketData(name)));
             Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(1), data);
             timer1 = new Timer(UpdateRows, null, 0, 1);
             timer2 = new Timer(TryAddNewRow, null, 10, 1);
