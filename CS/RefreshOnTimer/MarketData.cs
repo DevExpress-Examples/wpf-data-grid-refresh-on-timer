@@ -3,7 +3,7 @@ using System;
 
 namespace WpfApp6 {
     public class MarketData : BindableBase {
-        readonly static Random rnd = new Random();
+        readonly static Random random = new Random();
         const double Max = 950;
         const double Min = 350;
 
@@ -40,7 +40,7 @@ namespace WpfApp6 {
         static double NextRandom() {
             double value = 0;
             for(int i = 0; i < 5; i++)
-                value += rnd.NextDouble();
+                value += random.NextDouble();
             return value / 5;
         }
     }
