@@ -7,12 +7,6 @@ namespace WpfApp6 {
         const double Max = 950;
         const double Min = 350;
 
-        public MarketData(string name) {
-            Ticker = name;
-            Open = NextRandom() * (Max - Min) + Min;
-            DayVal = Open;
-            UpdateInternalCore(Open);
-        }
         public string Ticker { get; private set; }
         public double Last { get; private set; }
         public double ChgPercent { get; private set; }
@@ -20,6 +14,13 @@ namespace WpfApp6 {
         public double High { get; private set; }
         public double Low { get; private set; }
         public double DayVal { get; private set; }
+
+        public MarketData(string name) {
+            Ticker = name;
+            Open = NextRandom() * (Max - Min) + Min;
+            DayVal = Open;
+            UpdateInternalCore(Open);
+        }
 
         public void Update() {
             double value = DayVal - (Max - Min) * 0.05 + NextRandom() * (Max - Min) * 0.1;

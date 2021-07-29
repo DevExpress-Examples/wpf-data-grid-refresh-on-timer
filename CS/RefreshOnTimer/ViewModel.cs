@@ -33,6 +33,28 @@ namespace WpfApp6 {
 
         Stack<MarketData> additionalData = new Stack<MarketData>(AdditionalNames.Select(name => new MarketData(name)));
 
+        object syncRoot;
+        ObservableCollection<MarketData> data;
+
+        public RefreshOnTimerCollection Source { get; set; }
+
+        public ViewModel() {
+            data = new ObservableCollection<MarketData>(Names.Select(name => new MarketData(name)).ToList());
+            syncRoot = ((ICollection)data).SyncRoot;
+            Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(1), data);
+            timer1 = new Timer(UpdateRows, null, 0, 1);
+            timer2 = new Timer(TryAddNewRow, null, 10, 1);
+            timer3 = new Timer(TryRemoveRow, null, 20, 1);
+        }
+
+        [Command]
+        public void DisposeViewModel() {
+            timer1.Dispose();
+            timer2.Dispose();
+            timer3.Dispose();
+            Source.Dispose();
+        }
+
         void UpdateRows(object state) {
             lock(syncRoot) {
                 if(random.Next() % 2 == 0 && additionalData.Count > 0) {
@@ -58,28 +80,6 @@ namespace WpfApp6 {
                     data[row].Update();
                 }
             }
-        }
-
-        public ViewModel() {
-            data = new ObservableCollection<MarketData>(Names.Select(name => new MarketData(name)).ToList());
-            syncRoot = ((ICollection)data).SyncRoot;
-            Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(1), data);
-            timer1 = new Timer(UpdateRows, null, 0, 1);
-            timer2 = new Timer(TryAddNewRow, null, 10, 1);
-            timer3 = new Timer(TryRemoveRow, null, 20, 1);
-        }
-
-        object syncRoot;
-        ObservableCollection<MarketData> data;
-
-        public RefreshOnTimerCollection Source { get; set; }
-
-        [Command]
-        public void DisposeViewModel() {
-            timer1.Dispose();
-            timer2.Dispose();
-            timer3.Dispose();
-            Source.Dispose();
         }
     }
 }

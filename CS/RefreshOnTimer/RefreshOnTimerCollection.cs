@@ -7,6 +7,25 @@ using System.Windows.Threading;
 
 namespace WpfApp6 {
     public class RefreshOnTimerCollection : IBindingList, IDisposable {
+        DispatcherTimer timer;
+
+        IList storage;
+
+        List<object> storageCopy;
+
+        bool disposed;
+
+        ListChangedEventHandler listChanged;
+
+        event ListChangedEventHandler IBindingList.ListChanged {
+            add {
+                listChanged += value;
+            }
+            remove {
+                listChanged -= value;
+            }
+        }
+
         public RefreshOnTimerCollection(TimeSpan interval, IList dataSource) {
             timer = new DispatcherTimer(DispatcherPriority.Background);
             timer.Interval = interval;
@@ -24,14 +43,6 @@ namespace WpfApp6 {
             listChanged?.Invoke(storage, new ListChangedEventArgs(ListChangedType.Reset, 0));
         }
 
-        DispatcherTimer timer;
-
-        IList storage;
-
-        List<object> storageCopy;
-
-        bool disposed;
-
         public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -44,17 +55,6 @@ namespace WpfApp6 {
                 }
 
                 disposed = true;
-            }
-        }
-
-        ListChangedEventHandler listChanged;
-
-        event ListChangedEventHandler IBindingList.ListChanged {
-            add {
-                listChanged += value;
-            }
-            remove {
-                listChanged -= value;
             }
         }
 
