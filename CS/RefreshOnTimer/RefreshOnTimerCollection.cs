@@ -47,7 +47,7 @@ namespace WpfApp6 {
             }
         }
 
-        private ListChangedEventHandler listChanged;
+        ListChangedEventHandler listChanged;
 
         event ListChangedEventHandler IBindingList.ListChanged {
             add {
