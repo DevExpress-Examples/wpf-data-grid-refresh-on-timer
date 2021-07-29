@@ -11,7 +11,7 @@ namespace WpfApp6 {
             Ticker = name;
             Open = NextRandom() * (Max - Min) + Min;
             DayVal = Open;
-            UpdateInternal(Open);
+            UpdateInternalCore(Open);
         }
         public string Ticker { get; private set; }
         public double Last { get; private set; }
@@ -27,9 +27,9 @@ namespace WpfApp6 {
                 value = Min;
             if(value >= Max)
                 value = Max;
-            UpdateInternal(value);
+            UpdateInternalCore(value);
         }
-        void UpdateInternal(double value) {
+        void UpdateInternalCore(double value) {
             Last = DayVal;
             DayVal = value;
             ChgPercent = (DayVal - Last) * 100.0 / DayVal;
