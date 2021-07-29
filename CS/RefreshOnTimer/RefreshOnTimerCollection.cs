@@ -21,7 +21,7 @@ namespace WpfApp6 {
             lock(storage.SyncRoot) {
                 storageCopy = new List<object>(storage.Cast<object>());
             }
-            ListChanged?.Invoke(storage, new ListChangedEventArgs(ListChangedType.Reset, 0));
+            listChanged?.Invoke(storage, new ListChangedEventArgs(ListChangedType.Reset, 0));
         }
 
         DispatcherTimer timer;
@@ -30,19 +30,39 @@ namespace WpfApp6 {
 
         List<object> storageCopy;
 
-        public bool SupportsChangeNotification => true;
+        bool disposed;
 
-        public event ListChangedEventHandler ListChanged;
+        public void Dispose() {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-        public IEnumerator GetEnumerator() {
+        protected virtual void Dispose(bool disposing) {
+            if(!disposed) {
+                if(disposing) {
+                    timer.Stop();
+                }
+
+                disposed = true;
+            }
+        }
+
+        private ListChangedEventHandler listChanged;
+
+        event ListChangedEventHandler IBindingList.ListChanged {
+            add {
+                listChanged += value;
+            }
+            remove {
+                listChanged -= value;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
             return storageCopy.GetEnumerator();
         }
 
-        public void Dispose() {
-            timer.Stop();
-        }
-
-        #region NotSupported
+        bool IBindingList.SupportsChangeNotification => true;
 
         object IList.this[int index] { get => storageCopy[index]; set => new NotSupportedException(); }
 
@@ -127,6 +147,5 @@ namespace WpfApp6 {
         void ICollection.CopyTo(Array array, int index) {
             throw new NotSupportedException();
         }
-        #endregion
     }
 }

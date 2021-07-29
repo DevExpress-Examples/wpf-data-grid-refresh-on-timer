@@ -1,4 +1,5 @@
 ﻿using DevExpress.Mvvm;
+using DevExpress.Mvvm.DataAnnotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Threading;
 
 namespace WpfApp6 {
-    class ViewModel {
+    class ViewModel : ViewModelBase {
         #region Stocks
         static readonly string[] Names = new[] {
             "ANR", "FE", "GT", "PRGO", "APD", "PPL", "AES", "AVB", "IBM", "GAS", "EFX", "GPC", "ICE", "IVZ", "KO",
@@ -63,12 +64,6 @@ namespace WpfApp6 {
             data = new ObservableCollection<MarketData>(Names.Select(name => new MarketData(name)).ToList());
             syncRoot = ((ICollection)data).SyncRoot;
             Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(1), data);
-            DisposeViewModelCommand = new DelegateCommand(() => {
-                timer1.Dispose();
-                timer2.Dispose();
-                timer3.Dispose();
-                Source.Dispose();
-            });
             timer1 = new Timer(UpdateRows, null, 0, 1);
             timer2 = new Timer(TryAddNewRow, null, 10, 1);
             timer3 = new Timer(TryRemoveRow, null, 20, 1);
@@ -79,6 +74,12 @@ namespace WpfApp6 {
 
         public RefreshOnTimerCollection Source { get; set; }
 
-        public DelegateCommand DisposeViewModelCommand { get; }
+        [Command]
+        public void DisposeViewModel() {
+            timer1.Dispose();
+            timer2.Dispose();
+            timer3.Dispose();
+            Source.Dispose();
+        }
     }
 }
