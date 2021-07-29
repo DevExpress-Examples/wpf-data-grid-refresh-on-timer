@@ -9,7 +9,7 @@ namespace WpfApp6 {
 
         public MarketData(string name) {
             Ticker = name;
-            Open = NextRnd() * (Max - Min) + Min;
+            Open = NextRandom() * (Max - Min) + Min;
             DayVal = Open;
             UpdateInternal(Open);
         }
@@ -22,7 +22,7 @@ namespace WpfApp6 {
         public double DayVal { get; private set; }
 
         public void Update() {
-            double value = DayVal - (Max - Min) * 0.05 + NextRnd() * (Max - Min) * 0.1;
+            double value = DayVal - (Max - Min) * 0.05 + NextRandom() * (Max - Min) * 0.1;
             if(value <= Min)
                 value = Min;
             if(value >= Max)
@@ -37,7 +37,7 @@ namespace WpfApp6 {
             Low = Math.Min(Open, Math.Min(DayVal, Last));
             RaisePropertyChanged(null);
         }
-        static double NextRnd() {
+        static double NextRandom() {
             double value = 0;
             for(int i = 0; i < 5; i++)
                 value += rnd.NextDouble();
