@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Threading;
 
-namespace WpfApp6 {
+namespace RefreshOnTimer {
     public class RefreshOnTimerCollection : IBindingList, IDisposable {
         DispatcherTimer timer;
 

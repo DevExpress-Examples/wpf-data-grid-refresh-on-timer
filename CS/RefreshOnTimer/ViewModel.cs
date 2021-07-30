@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 
-namespace WpfApp6 {
+namespace RefreshOnTimer {
     class ViewModel : ViewModelBase {
         #region Stocks
         static readonly string[] Names = new[] {

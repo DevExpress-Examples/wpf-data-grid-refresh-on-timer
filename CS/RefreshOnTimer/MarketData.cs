@@ -1,7 +1,7 @@
 ﻿using DevExpress.Mvvm;
 using System;
 
-namespace WpfApp6 {
+namespace RefreshOnTimer {
     public class MarketData : BindableBase {
         readonly static Random random = new Random();
         const double Max = 950;

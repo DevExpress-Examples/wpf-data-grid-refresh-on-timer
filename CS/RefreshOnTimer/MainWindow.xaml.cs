@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace WpfApp6 {
+namespace RefreshOnTimer {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
