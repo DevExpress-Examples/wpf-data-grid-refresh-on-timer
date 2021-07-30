@@ -39,7 +39,7 @@ namespace RefreshOnTimer {
         void CopyStorage() {
             storageCopy = new List<object>(storage.Count);
             foreach (var item in storage) {
-                storage.Add(item);
+                storageCopy.Add(item);
             }
         }
 
