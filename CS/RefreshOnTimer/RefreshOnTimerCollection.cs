@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Threading;
 
-namespace WpfApp6 {
+namespace RefreshOnTimer {
     public class RefreshOnTimerCollection : IBindingList, IDisposable {
         DispatcherTimer timer;
 
@@ -39,7 +39,7 @@ namespace WpfApp6 {
         void CopyStorage() {
             storageCopy = new List<object>(storage.Count);
             foreach (var item in storage) {
-                storage.Add(item);
+                storageCopy.Add(item);
             }
         }
 
