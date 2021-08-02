@@ -89,13 +89,29 @@ namespace RefreshOnTimer {
 
         bool IList.IsFixedSize => storage.IsFixedSize;
 
-        bool IBindingList.IsSorted => throw new NotSupportedException();
+        bool IBindingList.IsSorted {
+            get {
+                throw new NotSupportedException();
+            }
+        }
 
-        PropertyDescriptor IBindingList.SortProperty => throw new NotSupportedException();
+        PropertyDescriptor IBindingList.SortProperty {
+            get {
+                throw new NotSupportedException();
+            }
+        }
 
-        ListSortDirection IBindingList.SortDirection => throw new NotSupportedException();
+        ListSortDirection IBindingList.SortDirection {
+            get {
+                throw new NotSupportedException();
+            }
+        }
 
-        object ICollection.SyncRoot => throw new NotSupportedException();
+        object ICollection.SyncRoot {
+            get {
+                throw new NotSupportedException();
+            }
+        }
 
         bool ICollection.IsSynchronized { 
             get {
