@@ -97,7 +97,11 @@ namespace RefreshOnTimer {
 
         object ICollection.SyncRoot => throw new NotSupportedException();
 
-        bool ICollection.IsSynchronized => throw new NotSupportedException();
+        bool ICollection.IsSynchronized { 
+            get {
+                throw new NotSupportedException();
+            } 
+        }
 
         object IBindingList.AddNew() {
             throw new NotSupportedException();
