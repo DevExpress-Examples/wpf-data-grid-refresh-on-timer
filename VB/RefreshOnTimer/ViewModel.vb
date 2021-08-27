@@ -50,28 +50,28 @@ Namespace RefreshOnTimer
 
 		Private Sub UpdateRows(ByVal state As Object)
 			SyncLock syncRoot
+				For i As Integer = 0 To 1
+					Dim row As Integer = random.Next(0, data.Count)
+					data(row).Update()
+				Next i
+			End SyncLock
+		End Sub
+
+		Private Sub TryAddNewRow(ByVal state As Object)
+			SyncLock syncRoot
 				If random.Next() Mod 2 = 0 AndAlso additionalData.Count > 0 Then
 					data.Add(additionalData.Pop())
 				End If
 			End SyncLock
 		End Sub
 
-		Private Sub TryAddNewRow(ByVal state As Object)
+		Private Sub TryRemoveRow(ByVal state As Object)
 			SyncLock syncRoot
 				If random.Next() Mod 2 = 0 AndAlso additionalData.Count < AdditionalNames.Length Then
 					Dim dataItem = data.First(Function(x) AdditionalNames.Contains(x.Ticker))
 					data.Remove(dataItem)
 					additionalData.Push(dataItem)
 				End If
-			End SyncLock
-		End Sub
-
-		Private Sub TryRemoveRow(ByVal state As Object)
-			SyncLock syncRoot
-				For i As Integer = 0 To 1
-					Dim row As Integer = random.Next(0, data.Count)
-					data(row).Update()
-				Next i
 			End SyncLock
 		End Sub
 	End Class
