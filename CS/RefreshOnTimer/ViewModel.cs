@@ -58,27 +58,27 @@ namespace RefreshOnTimer {
 
         void UpdateRows(object state) {
             lock(syncRoot) {
-                if(random.Next() % 2 == 0 && additionalData.Count > 0) {
-                    data.Add(additionalData.Pop());
+                for(int i = 0; i < 2; i++) {
+                    int row = random.Next(0, data.Count);
+                    data[row].Update();
                 }
             }
         }
 
         void TryAddNewRow(object state) {
             lock(syncRoot) {
-                if(random.Next() % 2 == 0 && additionalData.Count < AdditionalNames.Length) {
-                    var dataItem = data.First(x => AdditionalNames.Contains(x.Ticker));
-                    data.Remove(dataItem);
-                    additionalData.Push(dataItem);
+                if(random.Next() % 2 == 0 && additionalData.Count > 0) {
+                    data.Add(additionalData.Pop());
                 }
             }
         }
 
         void TryRemoveRow(object state) {
             lock(syncRoot) {
-                for(int i = 0; i < 2; i++) {
-                    int row = random.Next(0, data.Count);
-                    data[row].Update();
+                if(random.Next() % 2 == 0 && additionalData.Count < AdditionalNames.Length) {
+                    var dataItem = data.First(x => AdditionalNames.Contains(x.Ticker));
+                    data.Remove(dataItem);
+                    additionalData.Push(dataItem);
                 }
             }
         }
