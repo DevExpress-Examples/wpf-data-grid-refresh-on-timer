@@ -30,7 +30,7 @@
                          ItemsSource="{Binding Source}"
                          FilterString="([Last] >= 400)">
             <dxg:GridControl.View>
-                <dxg:TableView AllowEditing="False" ShowFixedTotalSummary="True" AllowDragDrop="True"  KeepViewportOnDataUpdate="True"/>
+                <dxg:TableView AllowEditing="False" ShowFixedTotalSummary="True" KeepViewportOnDataUpdate="True"/>
             </dxg:GridControl.View>
             <dxg:GridControl.TotalSummary>
                 <dxg:GridSummaryItem SummaryType="Count" Alignment="Right" />
