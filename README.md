@@ -5,7 +5,7 @@
 <!-- default badges end -->
 # Data Grid for WPF - How to Refresh the Data Grid on a Timer
 
-This example illustrates how to process GridControl updates in the specified period of time. You can implement `RefreshOnTimerCollection` and wrap your data source into it. The collection blocks notifications from the source and copies data periodically. The GridConrol updates its data according `RefreshOnTimerCollection`. You can use this technique if your data source contains less than 100K items and data changes frequently (for example, each millisecond).
+This example illustrates how to process GridControl updates on a timer. You can implement `RefreshOnTimerCollection` and wrap your data source into it. The collection blocks notifications about changes from the source and copies data in the specified time interval. Changes in `RefreshOnTimerCollection` trigger GridControl updates. You can use this technique if your data source contains less than 100K items and data changes frequently (for example, each millisecond).
 
 The `RefreshOnTimerCollection` class exposes a constructor that accepts two parameters: the time interval and the data source collection.
 
