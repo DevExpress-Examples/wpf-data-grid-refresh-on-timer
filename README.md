@@ -20,7 +20,7 @@ If the data source collection is too large, the GridControl may process updates 
 <!-- default file list -->
 ## Files to Look At
 
-- [RefreshOnTimerCollection.cs](./CS/RefreshOnTimer/RefreshOnTimerCollection.cs#L17-L20) ([RefreshOnTimerCollection.vb](./VB/RefreshOnTimer/RefreshOnTimerCollection.vb#L17-L20))
+- [RefreshOnTimerCollection.cs](./CS/RefreshOnTimer/RefreshOnTimerCollection.cs) ([RefreshOnTimerCollection.vb](./VB/RefreshOnTimer/RefreshOnTimerCollection.vb))
 - [ViewModel.cs](./CS/RefreshOnTimer/ViewModel.cs) ([ViewModel.vb](./VB/RefreshOnTimer/ViewModel.vb))
 
 <!-- default file list end -->
