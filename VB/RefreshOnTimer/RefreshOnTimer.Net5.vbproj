@@ -16,7 +16,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
-    <Page Remove="@(ApplicationDefinition)" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Data" Version="21.1.*-*" />
