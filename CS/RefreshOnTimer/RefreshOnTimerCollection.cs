@@ -38,8 +38,8 @@ namespace RefreshOnTimer {
 
         void CopyStorage() {
             storageCopy = new List<object>(storage.Count);
-            foreach (var item in storage) {
-                storageCopy.Add(item);
+            foreach (var element in storage) {
+                storageCopy.Add(element);
             }
         }
 
@@ -71,7 +71,7 @@ namespace RefreshOnTimer {
 
         bool IBindingList.SupportsChangeNotification => true;
 
-        object IList.this[int index] { get => storageCopy[index]; set => new NotSupportedException(); }
+        object IList.this[int index] { get => storageCopy[index]; set => throw new NotSupportedException(); }
 
         int ICollection.Count => storageCopy.Count;
 
