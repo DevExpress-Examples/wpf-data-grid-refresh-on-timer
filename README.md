@@ -28,7 +28,7 @@ If the data source collection is too large, the [GridControl](https://docs.devex
 
 ## Documentation
 
-- [Automatic Refresh on a Timer](https://docs.devexpress.com/WPF/115836/controls-and-libraries/data-grid/performance-improvement/frequent-data-updates?v=21.2#automatic-refresh-on-a-timer)
+- [Automatic Refresh on a Timer](https://docs.devexpress.com/WPF/115836/controls-and-libraries/data-grid/performance-improvement/frequent-data-updates#automatic-refresh-on-a-timer)
 <!-- feedback -->
 ## Does this example address your development requirements/objectives?
 
@@ -36,3 +36,4 @@ If the data source collection is too large, the [GridControl](https://docs.devex
 
 (you will be redirected to DevExpress.com to submit your response)
 <!-- feedback end -->
+
