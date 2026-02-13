@@ -17,7 +17,7 @@ Source = new RefreshOnTimerCollection(TimeSpan.FromSeconds(1), data);
 ```
 If the data source collection is too large, the GridControl may process updates incorrectly, and visible UI lags might appear. In this case, you can increase the time interval value. 
 <!-- feedback -->
-## Does this example address your development requirements/objectives?
+## Does This Example Address Your Development Requirements/Objectives?
 
 [<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=wpf-data-grid-refresh-on-timer&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=wpf-data-grid-refresh-on-timer&~~~was_helpful=no)
 
